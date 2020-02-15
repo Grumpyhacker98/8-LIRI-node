@@ -1,25 +1,13 @@
-// LIRI will search Spotify for songs, Bands in Town for concerts, and OMDB for movies.
-
-// do a readme
-// [click here for a rundown](https://guides.github.com/features/mastering-markdown/), 
-
-// * [Node-Spotify-API](https://www.npmjs.com/package/node-spotify-api)
-
-// * [Axios](https://www.npmjs.com/package/axios)
-
-//   * You'll use Axios to grab data from the [OMDB API](http://www.omdbapi.com) and the [Bands In Town API](http://www.artists.bandsintown.com/bandsintown-api)
-
-// * [Moment](https://www.npmjs.com/package/moment)
-
-// * [DotEnv](https://www.npmjs.com/package/dotenv)
-
 
 require("dotenv").config()
 
 const axios = require('axios');
-var keys = require("./keys.js");
-var Spotify = require('node-spotify-api');
 
+// imported keys
+var keys = require("./keys.js");
+// import spotify api+constructor
+var Spotify = require('node-spotify-api');
+// construct with personal imported keys
 var spotify = new Spotify(keys.spotify);
 
 var searchAction = String(process.argv[2])
@@ -35,24 +23,37 @@ if (searchAction === "concert-this") {
                 console.log(error)
             }
             console.log("===============================")
-            for(var i=0;i<response.data.length;i++){
+            for (var i = 0; i < response.data.length; i++) {
                 v = i + 1
-                console.log("Event Number: "+v)
-                console.log("country: "+response.data[i].venue.country)
-                console.log("Venue Name: "+response.data[i].name)
-                console.log("Date: "+response.data[i].datetime)
+                console.log("Event Number: " + v)
+                console.log("country: " + response.data[i].venue.country)
+                console.log("Venue Name: " + response.data[i].name)
+                console.log("Date: " + response.data[i].datetime)
                 console.log("===============================")
             }
         })
 }
 if (searchAction === "spotify-this") {
-    spotify.search({ type: searchName, query: 'All the Small Things' }, function (err, data) {
+
+    spotify.search({ type: 'track', query: searchName, limit: 10}, function (err, response) {
         if (err) {
             return console.log('Error occurred: ' + err);
         }
-
-        console.log(data);
+        console.log(response)
+        data = response.tracks.items
+        console.log("=====================")
+        for(var i=0;i<data.length;i++){
+            console.log("Entry: "+i)
+            for(var f=0;f<data[f].artists.length;f++){
+                console.log("Artist(s): "+data[i].artists[f].name)
+            }
+            console.log("Name: "+data[i].name)
+            console.log("Link: "+data[i].href)
+            console.log("From Album: "+data[i].album.name)
+            console.log("=====================")
+        }
     });
+
 }
 if (searchAction === "movie-this") {
     axios.get(omdbKey)
@@ -72,21 +73,3 @@ if (searchAction === "movie-this") {
 if (searchAction === "do-what-it-says") {
     console.log("test1")
 }
-
-// liri command line 1 inputs
-    // concert-this <artist/band name here>
-        // search bandsintownAPI give venue name location date
-    // spotify-this-song song
-        // search spotifyAPI and give artists name album previous link
-    // movie-this
-
-    // do-what-it-says
-        // run command from RandomSource.txt
-
-// nodeSpotify
-
-
-// axios
-
-
-
