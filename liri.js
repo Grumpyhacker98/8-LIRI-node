@@ -27,7 +27,7 @@ if (searchAction === "concert-this") {
                 v = i + 1
                 console.log("Event Number: " + v)
                 console.log("country: " + response.data[i].venue.country)
-                console.log("Venue Name: " + response.data[i].name)
+                console.log("Venue Name: " + response.data[i].venue.name)
                 console.log("Date: " + response.data[i].datetime)
                 console.log("===============================")
             }
@@ -35,21 +35,19 @@ if (searchAction === "concert-this") {
 }
 if (searchAction === "spotify-this") {
 
-    spotify.search({ type: 'track', query: searchName, limit: 10}, function (err, response) {
-        if (err) {
-            return console.log('Error occurred: ' + err);
-        }
-        console.log(response)
+    spotify.search({ type: 'track', query: searchName, limit: 10 }, function (err, response) {
+        if (err) { return console.log('Error occurred: ' + err) }
+
         data = response.tracks.items
         console.log("=====================")
-        for(var i=0;i<data.length;i++){
-            console.log("Entry: "+i)
-            for(var f=0;f<data[f].artists.length;f++){
-                console.log("Artist(s): "+data[i].artists[f].name)
+        for (var i = 0; i < data.length; i++) {
+            console.log("Entry: " + i)
+            for (var f = 0; f < data[f].artists.length; f++) {
+                console.log("Artist(s): " + data[i].artists[f].name)
             }
-            console.log("Name: "+data[i].name)
-            console.log("Link: "+data[i].href)
-            console.log("From Album: "+data[i].album.name)
+            console.log("Name: " + data[i].name)
+            console.log("Link: " + data[i].href)
+            console.log("From Album: " + data[i].album.name)
             console.log("=====================")
         }
     });
